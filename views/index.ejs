@@ -6,7 +6,23 @@
     <title>Login Project</title>
 </head>
 <body>
-    <form action="/submit" method="POST">
+    <h2>Register</h2>
+    <form action="/submitRegister" method="POST">
+        <label for="fname">First Name:</label><br>
+        <input type="text" id="fname" name="fname"><br>
+        <label for="lname">Last Name:</label><br>
+        <input type="text" id="lname" name="lname"><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br>
+        <label for="registeredUser">Username:</label><br>
+        <input type="text" id="registeredUser" name="registeredUser"><br>
+        <label for="userPassword">Password:</label><br>
+        <input type="password" id="userPassword" name="userPassword"><br>
+        <input type="submit" id="submit" name="submit">
+        
+    </form>
+    <h2>Login</h2>
+    <form action="/submitLogin" method="POST">
         <label for="username">Username</label>
         <input type="text" id="username" name="username">
         <label for="password">Password:</label>

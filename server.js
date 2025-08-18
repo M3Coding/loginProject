@@ -5,10 +5,11 @@ const app = express();
 const port = 3000;
 
 const loginInfo = {
-    username: "Meady",
-    password: "Anewme2011", 
-    email: "meady2009@gmail.com"
+    username: "JohnDoe",
+    password: "12345", 
+    email: "JohnDoe@gmail.com"
 };
+const registeredInfo = {}
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
@@ -19,6 +20,21 @@ app.get("/", (req, res) => {
     res.render("index.ejs");
 })
 
+//Register Server
+app.post("/submitRegister", (req, res) => {
+    let registeredInfo = {
+        firstName: req.body.fname,
+        lastName: req.body.lname,
+        username: req.body.registeredUser,
+        password: req.body.userPassword,
+        email: req.body.email
+
+    };
+
+    console.log(registeredInfo);
+    res.render("register.ejs")
+})
+//Login Server
 app.post("/submit", (req, res) => {
     let userInput = req.body.username;
     let userPass = req.body.password;
