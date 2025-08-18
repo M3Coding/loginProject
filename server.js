@@ -29,9 +29,9 @@ app.post("/submitRegister", (req, res) => {
         password: req.body.userPassword,
         email: req.body.email
 
-    };
+    };// object gets the user information from registration page. 
 
-    console.log(registeredInfo);
+    console.log(registeredInfo);//test logic to see if properly gathering information. 
     res.render("register.ejs")
 })
 //Login Server
@@ -46,9 +46,11 @@ if (userInput == loginInfo.username && userPass == loginInfo.password) {
 } else {
     console.log("Login unsuccessful");
 }
-
+//check if the login information stored is matching what the user is putting in. Hardcoded object with login information. 
 
 })
+
+//Next steps. add postgres database to recieve registration and check it with login screen. 
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
