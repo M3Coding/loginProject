@@ -1,16 +1,28 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import pg from "pg";
+import bcrypt from "bcrypt";
 
 const app = express();
 const port = 3000;
+const saltRounds = 10;
+const db = new pg.Client( {
+    database: "testUsers",
+    host: "localhost",
+    port: 5432,
+    user: "postgres",
+    password: "CodingGenius2023",
 
-const loginInfo = {
-    username: "JohnDoe",
-    password: "12345", 
-    email: "JohnDoe@gmail.com"
-};
-const registeredInfo = {}
+});
+db.connect();
 
+const insert = (fname, lname, username, email, password) => {
+    bcrypt.hash(password, saltRounds, async(err, hash) => {
+        if (err) throw err;
+        await db.query("INSERT INTO users (fname, lname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [fname, lname, username, email, hash]);
+    });
+    
+}
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
@@ -22,16 +34,17 @@ app.get("/", (req, res) => {
 
 //Register Server
 app.post("/submitRegister", (req, res) => {
-    let registeredInfo = {
-        firstName: req.body.fname,
-        lastName: req.body.lname,
-        username: req.body.registeredUser,
-        password: req.body.userPassword,
-        email: req.body.email
+    let firstName= req.body.fname;
+    let lastName= req.body.lname;
+    let user= req.body.registeredUser;
+    let pass= req.body.userPassword;
+    let userEmail= req.body.email;
+    
+    
 
-    };// object gets the user information from registration page. 
+    // object gets the user information from registration page. 
 
-    console.log(registeredInfo);//test logic to see if properly gathering information. 
+    insert(firstName, lastName, user, userEmail, pass);//test logic to see if properly gathering information. 
     res.render("register.ejs")
 })
 //Login Server
