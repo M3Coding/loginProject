@@ -22,7 +22,31 @@ const insert = (fname, lname, username, email, password) => {
         await db.query("INSERT INTO users (fname, lname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [fname, lname, username, email, hash]);
     });
     
-}
+} //insert into db and add hash function for password
+
+let verification = async(user, pass) => {
+    try{
+    let result = await db.query("SELECT * FROM users WHERE username=$1", [user]);
+    let userInfo = result.rows[0];
+    console.log(userInfo);
+    if (!userInfo) {
+        console.log("User not found!");
+        return false; 
+    } 
+    const match = await bcrypt.compare(pass, userInfo.password);
+    if (match) {
+        console.log("Login Successful")
+        return true;
+    } else {
+        console.log("Login Unsuccessful")
+        return false;
+    }
+
+    }catch(err) {
+        console.error("User Verification failed:", err);
+        return false;
+    }
+ }
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
@@ -48,19 +72,13 @@ app.post("/submitRegister", (req, res) => {
     res.render("register.ejs")
 })
 //Login Server
-app.post("/submit", (req, res) => {
+app.post("/submitLogin", (req, res) => {
     let userInput = req.body.username;
     let userPass = req.body.password;
 
-console.log(userInput, userPass);//check if the userinput is being parsed to the server. Check is successful.
-
-if (userInput == loginInfo.username && userPass == loginInfo.password) {
-    console.log("Login Successful");
-} else {
-    console.log("Login unsuccessful");
-}
+verification(userInput, userPass);
 //check if the login information stored is matching what the user is putting in. Hardcoded object with login information. 
-
+res.redirect("/")
 })
 
 //Next steps. add postgres database to recieve registration and check it with login screen. 
